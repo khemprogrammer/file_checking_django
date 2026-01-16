@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+  <div class="card-header">Create an Account</div>
+  <form method="post" class="form-grid">
+    {% csrf_token %}
+    {{ form.username.label_tag }}
+    {{ form.username }}
+    {{ form.password1.label_tag }}
+    {{ form.password1 }}
+    {{ form.password2.label_tag }}
+    {{ form.password2 }}
+    <div class="actions">
+      <button class="btn btn-primary" type="submit">Sign Up</button>
+      <a class="nav-link" href="/accounts/login/">Already have an account? Login</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

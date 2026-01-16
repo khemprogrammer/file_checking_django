@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+  <div class="grid-two">
+    <div class="card-header">Upload a File</div>
+    <div class="muted">Allowed: PDF, JPG, PNG • Max: 5MB</div>
+  </div>
+  <form method="post" enctype="multipart/form-data" class="form-grid">
+    {% csrf_token %}
+    {{ form.file.label_tag }}
+    {{ form.file }}
+    <div class="actions">
+      <button class="btn btn-primary" type="submit">Upload</button>
+    </div>
+  </form>
+</section>
+{% endblock %}

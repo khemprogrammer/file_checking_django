@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+  <div class="card-header">Login</div>
+  <form method="post" class="form-grid">
+    {% csrf_token %}
+    {{ form.username.label_tag }}
+    {{ form.username }}
+    {{ form.password.label_tag }}
+    {{ form.password }}
+    <div class="actions">
+      <button class="btn btn-primary" type="submit">Login</button>
+    </div>
+  </form>
+</section>
+{% endblock %}
