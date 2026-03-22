@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}My Files - SecureUpload{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="card animate-fade-in">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-folder-fill fs-4 me-2"></i>
+                        <span>My Uploaded Files</span>
+                    </div>
+                    <a href="{% url 'uploads:upload_file' %}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-plus-circle me-1"></i>Upload New
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if uploads %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>File Name</th>
+                                    <th>Size</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Uploaded</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for upload in uploads %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% if upload.extension == 'pdf' %}
+                                            <i class="bi bi-file-earmark-pdf text-danger fs-4 me-2"></i>
+                                            {% elif upload.extension in 'png,jpg,jpeg,gif,bmp,webp' %}
+                                            <i class="bi bi-file-earmark-image text-primary fs-4 me-2"></i>
+                                            {% else %}
+                                            <i class="bi bi-file-earmark text-secondary fs-4 me-2"></i>
+                                            {% endif %}
+                                            <span>{{ upload.original_filename }}</span>
+                                        </div>
+                                    </td>
+                                    <td>{{ upload.size|filesizeformat }}</td>
+                                    <td>{{ upload.extension|upper }}</td>
+                                    <td>
+                                        <span class="badge bg-{% if upload.scan_status == 'CLEAN' %}success{% elif upload.scan_status == 'INFECTED' %}danger{% elif upload.scan_status == 'ERROR' %}warning{% else %}secondary{% endif %}">
+                                            {{ upload.get_scan_status_display }}
+                                        </span>
+                                    </td>
+                                    <td>{{ upload.created_at|date:"M d, Y" }}</td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="{% url 'uploads:file_detail' upload.pk %}" class="btn btn-sm btn-outline-primary" title="View">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a href="{% url 'uploads:download_file' upload.pk %}" class="btn btn-sm btn-outline-success" title="Download">
+                                                <i class="bi bi-download"></i>
+                                            </a>
+                                            <a href="{% url 'uploads:delete_file' upload.pk %}" class="btn btn-sm btn-outline-danger" title="Delete">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-folder-x display-1 text-muted mb-3"></i>
+                        <h4>No files uploaded yet</h4>
+                        <p class="text-muted">Upload your first file to get started</p>
+                        <a href="{% url 'uploads:upload_file' %}" class="btn btn-primary">
+                            <i class="bi bi-cloud-upload me-2"></i>Upload File
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

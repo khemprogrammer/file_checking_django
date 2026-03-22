@@ -3,9 +3,9 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get("SECRET_KEY", "dev-insecure-key")
+SECRET_KEY = "dev-insecure-key"
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -32,7 +32,7 @@ ROOT_URLCONF = "secure_upload.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "uploads" / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -78,8 +78,8 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 
 FILE_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024
 
-UPLOAD_ALLOWED_EXTENSIONS = ["pdf", "png", "jpg", "jpeg"]
-UPLOAD_ALLOWED_MIME_TYPES = ["application/pdf", "image/png", "image/jpeg"]
+UPLOAD_ALLOWED_EXTENSIONS = ["pdf", "png", "jpg", "jpeg", "gif", "bmp", "webp"]
+UPLOAD_ALLOWED_MIME_TYPES = ["application/pdf", "image/png", "image/jpeg", "image/gif", "image/bmp", "image/webp"]
 UPLOAD_MAX_SIZE = 5 * 1024 * 1024
 
 CLAMAV_HOST = os.environ.get("CLAMAV_HOST", "127.0.0.1")
@@ -109,6 +109,4 @@ LOGGING = {
 
 LOGIN_URL = "/accounts/login/"
 LOGIN_REDIRECT_URL = "/uploads/"
-LOGOUT_REDIRECT_URL = "/accounts/login/"
-
-SCAN_STRICT = False
+LOGOUT_REDIRECT_URL = "/"

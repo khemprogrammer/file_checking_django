@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Upload File - SecureUpload{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card animate-fade-in">
+                <div class="card-header">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-cloud-upload fs-4 me-2"></i>
+                        <span>Upload Your File</span>
+                    </div>
+                </div>
+                <div class="card-body p-5">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label for="id_file" class="form-label">Select File</label>
+                            <input type="file" class="form-control" name="file" id="id_file" required>
+                            <div class="form-text">Allowed: PDF, PNG, JPG, JPEG, GIF, BMP, WEBP (Max 5MB)</div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="stat-card">
+                                    <div class="d-flex align-items-center">
+                                        <div class="stat-icon bg-success bg-gradient text-white me-3">
+                                            <i class="bi bi-check-lg"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0 text-muted">Allowed Extensions</h6>
+                                            <h6 class="mb-0">PDF, PNG, JPG, JPEG</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="stat-card">
+                                    <div class="d-flex align-items-center">
+                                        <div class="stat-icon bg-primary bg-gradient text-white me-3">
+                                            <i class="bi bi-hdd"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0 text-muted">Maximum Size</h6>
+                                            <h6 class="mb-0">5 MB</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-warning mt-4">
+                            <i class="bi bi-shield-exclamation me-2"></i>
+                            <strong>Security Notice:</strong> All files are automatically scanned for viruses before storage.
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-cloud-upload me-2"></i>Upload File
+                            </button>
+                            <a href="{% url 'uploads:home' %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Back to Home
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

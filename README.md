@@ -1,97 +1,120 @@
-# Secure File Upload (Django)
+# Secure File Upload System
 
-Secure, auditable file uploads with authentication, strict validation, MIME sniffing, integrity checks, and multi-backend malware scanning.
+A Django-based secure file upload system with virus scanning, user authentication, and a modern responsive UI.
 
 ## Features
-- Authentication: login, logout, and signup with auto-login
-- Allowed types: PDF, PNG, JPG/JPEG; size ≤ 5 MB
-- Content validation: libmagic-based MIME sniffing
-- Integrity checks: Pillow for images, PyPDF2 for PDFs (rejects corrupt files)
-- Malware scanning: tries clamd → clamscan → Windows Defender (MpCmdRun)
-- Safe storage: UUID filenames under `media/secure_uploads/`
-- Quarantine: files marked PENDING when scanner is unavailable (no download link)
-- Admin: rescan selected uploads, see statuses and metadata
-- Logging: structured file-audit logs in `upload_audit.log`
+
+- **User Authentication**: Login, logout, and user registration (signup)
+- **Secure File Upload**: Upload PDF, PNG, JPG, JPEG, GIF, BMP, WEBP files (max 5MB)
+- **Virus Scanning**: Automatic virus scanning using ClamAV
+- **File Management**: View, download, and delete uploaded files
+- **MIME Type Validation**: Strict validation to prevent file type spoofing
+- **Audit Logging**: All upload activities are logged
+- **Responsive UI**: Modern Bootstrap 5 based design with premium styling
 
 ## Requirements
+
 - Python 3.10+
-- See `requirements.txt` for Python packages
-- Optional scanners:
-  - ClamAV daemon (clamd) on `127.0.0.1:3310`
-  - ClamAV CLI (`clamscan`)
-  - Windows Defender CLI (`MpCmdRun.exe`) on Windows
+- Django 5.0+
+- ClamAV (optional, for virus scanning)
 
-## Quickstart
-### 1) Setup
+## Installation
+
+### 1. Clone the repository
 ```bash
-python -m venv .venv
-# Windows
-.venv\Scripts\activate
-# macOS/Linux
-source .venv/bin/activate
+git clone <repository-url>
+cd secure_file_project
+```
 
+### 2. Create virtual environment
+```bash
+# Windows
+python -m venv .venv
+.venv\Scripts\activate
+
+# macOS/Linux
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+### 3. Install dependencies
+```bash
 pip install -r requirements.txt
 ```
 
-### 2) Database and admin
+### 4. Database setup
 ```bash
 python manage.py migrate
 python manage.py createsuperuser
 ```
 
-### 3) Run
+### 5. Run the server
 ```bash
 python manage.py runserver
-# Visit: http://127.0.0.1:8000/
 ```
 
-## Usage
-- Signup: /accounts/signup/
-- Login: /accounts/login/
-- Upload: /
-- My Uploads: /uploads/
-- Admin: /admin/
-
-## Scanner Options
-- clamd (recommended):
-  - Host: `127.0.0.1`, Port: `3310`
-  - Set env vars if needed: `CLAMAV_HOST`, `CLAMAV_PORT`
-- clamscan (CLI fallback):
-  - Install ClamAV and run `freshclam` to update definitions
-- Windows Defender (Windows fallback):
-  - The app auto-locates `MpCmdRun.exe` in typical Defender locations
-
-## Behavior
-- CLEAN: file stored and link visible
-- INFECTED: file deleted, status INFECTED
-- Scanner unavailable:
-  - Dev-friendly default: `PENDING` and quarantined (no link)
-  - Strict mode: set `SCAN_STRICT=1` to mark as `ERROR`
-
 ## Configuration
-Set environment variables as needed:
-- `CLAMAV_HOST` (default `127.0.0.1`)
-- `CLAMAV_PORT` (default `3310`)
-- `SCAN_STRICT` (`0` or `1`; default `0`)
 
-## Tests
+Environment variables (optional):
+- `CLAMAV_HOST` - ClamAV server host (default: 127.0.0.1)
+- `CLAMAV_PORT` - ClamAV server port (default: 3310)
+- `SCAN_STRICT` - Set to "1" to reject files when scanner is unavailable (default: "0")
+
+## Usage
+
+- **Home Page**: http://127.0.0.1:8000/
+- **Login**: http://127.0.0.1:8000/accounts/login/
+- **Sign Up**: http://127.0.0.1:8000/signup/
+- **Upload**: http://127.0.0.1:8000/uploads/
+- **My Files**: http://127.0.0.1:8000/uploads/list/
+- **Admin Panel**: http://127.0.0.1:8000/admin/
+
+### Default Admin Credentials
+- Username: `admin`
+- Password: `khem123456`
+
+## Project Structure
+
+```
+secure_file_project/
+├── manage.py              # Django management script
+├── db.sqlite3             # SQLite database
+├── requirements.txt       # Python dependencies
+├── README.md              # This file
+├── upload_audit.log       # Upload audit log
+├── media/                 # Uploaded files storage
+│   └── secure_uploads/    # Secure file storage
+├── secure_upload/         # Django project settings
+│   ├── settings.py        # Project settings
+│   ├── urls.py             # URL configuration
+│   ├── wsgi.py            # WSGI config
+│   └── asgi.py            # ASGI config
+└── uploads/               # Main application
+    ├── models.py           # Database models
+    ├── views.py           # View functions
+    ├── urls.py            # URL routing
+    ├── validators.py      # File validators
+    ├── tests.py           # Unit tests
+    ├── migrations/        # Database migrations
+    └── templates/         # HTML templates
+        ├── base.html
+        ├── registration/
+        │   ├── login.html
+        │   └── signup.html
+        └── uploads/
+            ├── home.html
+            ├── upload.html
+            ├── list.html
+            ├── detail.html
+            └── delete.html
+```
+
+## Testing
+
 ```bash
 python manage.py test -v 2
 ```
-Includes validation, integrity, scanner behavior, and auth flow tests.
 
-## Production Notes
-- Set `DEBUG=False` and a strong `SECRET_KEY`
-- Configure a real static files pipeline and `STATIC_ROOT`
-- Serve media securely; link files only when status is `CLEAN`
-- Prefer running clamd and queue scans asynchronously for scale
+## License
 
-## Project Structure Highlights
-- Settings: `secure_upload/settings.py`
-- URLs: `secure_upload/urls.py`
-- Uploads app:
-  - Models, views, forms, validators
-  - Services: `mime.py`, `scanner.py`, `integrity.py`
-  - Templates: base, upload form/list, auth pages
-  - Static CSS: `uploads/static/uploads/style.css`
-
+MIT License
