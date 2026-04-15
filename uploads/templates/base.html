@@ -374,11 +374,6 @@
                             <i class="bi bi-person-circle me-1"></i> {{ user.username }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <a class="dropdown-item" href="{% url 'admin:index' %}">
-                                    <i class="bi bi-gear me-2"></i> Admin Panel
-                                </a>
-                            </li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form method="post" action="{% url 'logout' %}">
@@ -417,10 +412,10 @@
             <div class="row">
                 <div class="col-md-6">
                     <h5><i class="bi bi-shield-lock-fill me-2"></i>SecureUpload</h5>
-                    <p class="text-muted">Secure file upload system with virus scanning.</p>
+                    <p>Secure file upload system with virus scanning.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <p class="text-muted mb-0">&copy; 2026 SecureUpload. All rights reserved.</p>
+                    <p class="mb-0">&copy; 2026 SecureUpload. All rights reserved.</p>
                 </div>
             </div>
         </div>
