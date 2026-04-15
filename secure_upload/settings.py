@@ -54,6 +54,10 @@ TEMPLATES = [
 WSGI_APPLICATION = "secure_upload.wsgi.application"
 ASGI_APPLICATION = "secure_upload.asgi.application"
 
+print("DATABASE_URL =", os.environ.get('DATABASE_URL'))
+if not database_url:
+    raise Exception("DATABASE_URL environment variable is not set!")
+
 DATABASES = {
     'default': dj_database_url.config(
         default=os.environ.get('DATABASE_URL'),
